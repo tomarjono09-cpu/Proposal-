@@ -1,0 +1,150 @@
+# Proposal-
+A small website made with love to ask the most important question 💍
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Marry Me?</title>  <!-- Page title in browser tab -->
+    <style>
+        /* Styles for the whole page background and layout */
+        body {
+            font-family: 'Arial', sans-serif;  /* Clean font */
+            background: linear-gradient(to bottom, #ff69b4, #ffb6c1);  /* Pink gradient from top to bottom */
+            color: white;  /* White text */
+            text-align: center;  /* Center all text */
+            margin: 0;  /* No margins */
+            padding: 0;  /* No padding */
+            height: 100vh;  /* Full screen height */
+            display: flex;  /* Use flexbox for centering */
+            flex-direction: column;  /* Stack items vertically */
+            justify-content: center;  /* Center vertically */
+            align-items: center;  /* Center horizontally */
+        }
+        /* Styles for the main heading */
+        h1 {
+            font-size: 3em;  /* Large text */
+            margin-bottom: 20px;  /* Space below */
+        }
+        /* Styles for the message paragraph */
+        p {
+            font-size: 1.5em;  /* Medium text */
+            margin-bottom: 40px;  /* Space below */
+        }
+        /* General button styles */
+        button {
+            font-size: 1.2em;  /* Button text size */
+            padding: 15px 30px;  /* Button padding */
+            margin: 10px;  /* Space around buttons */
+            border: none;  /* No border */
+            border-radius: 10px;  /* Rounded corners */
+            cursor: pointer;  /* Hand cursor on hover */
+            transition: background 0.3s;  /* Smooth color change */
+        }
+        /* Specific style for Yes button */
+        #yesBtn {
+            background: #4CAF50;  /* Green background */
+            color: white;
+        }
+        #yesBtn:hover {
+            background: #45a049;  /* Darker green on hover */
+        }
+        /* Specific style for No button */
+        #noBtn {
+            background: #f44336;  /* Red background */
+            color: white;
+        }
+        #noBtn:hover {
+            background: #da190b;  /* Darker red on hover */
+        }
+        /* Style for the response message (hidden at first) */
+        #response {
+            font-size: 2em;  /* Large response text */
+            margin-top: 20px;  /* Space above */
+            display: none;  /* Hidden until shown */
+        }
+        /* Style for confetti canvas (invisible layer) */
+        canvas {
+            position: fixed;  /* Fixed position over everything */
+            top: 0;  /* Top of screen */
+            left: 0;  /* Left of screen */
+            pointer-events: none;  /* Doesn't block clicks */
+            z-index: -1;  /* Behind other elements */
+        }
+    </style>
+</head>
+<body>
+    <!-- Main heading -->
+    <h1>Happy Valentine's Week, [Partner's Name]!</h1>
+    <!-- Proposal message -->
+    <p>From the moment I met you, my heart has been yours. Will you make me the happiest person and say yes to spending forever with me?</p>
+    <!-- Yes button -->
+    <button id="yesBtn">Yes! 💍</button>
+    <!-- No button -->
+    <button id="noBtn">No</button>
+    <!-- Response area (starts hidden) -->
+    <div id="response"></div>
+    <!-- Canvas for confetti animation -->
+    <canvas id="confetti"></canvas>
+
+    <script>
+        // Get references to HTML elements
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const response = document.getElementById('response');
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size to full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Array to hold confetti pieces
+        let confetti = [];
+
+        // Function to create confetti pieces
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {  // Make 100 pieces
+                confetti.push({
+                    x: Math.random() * canvas.width,  // Random horizontal position
+                    y: Math.random() * canvas.height,  // Random vertical position
+                    vx: (Math.random() - 0.5) * 10,  // Random horizontal speed
+                    vy: Math.random() * 5 + 5,  // Downward speed
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,  // Random color
+                    size: Math.random() * 10 + 5  // Random size
+                });
+            }
+        }
+
+        // Function to draw and animate confetti
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear canvas
+            confetti.forEach(p => {
+                ctx.fillStyle = p.color;  // Set color
+                ctx.fillRect(p.x, p.y, p.size, p.size);  // Draw square
+                p.x += p.vx;  // Move horizontally
+                p.y += p.vy;  // Move vertically
+                if (p.y > canvas.height) {  // If off screen, reset
+                    p.y = 0;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawConfetti);  // Loop animation
+        }
+
+        // When Yes is clicked
+        yesBtn.addEventListener('click', () => {
+            response.textContent = "Yay! I love you forever! 💕";  // Show message
+            response.style.display = 'block';  // Make it visible
+            createConfetti();  // Create confetti
+            drawConfetti();  // Start animation
+        });
+
+        // When No is clicked
+        noBtn.addEventListener('click', () => {
+            response.textContent = "That's okay, but I won't give up! 😘";  // Show message
+            response.style.display = 'block';  // Make it visible
+        });
+    </script>
+</body>
+</html>
